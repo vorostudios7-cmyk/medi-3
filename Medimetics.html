@@ -1,0 +1,752 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Medimetics — Science Driven Skincare</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Rajdhani:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --navy:#0a0e1a;--deep:#0d1526;--teal:#3a8fa3;--teal-light:#5bb8d4;
+  --steel:#1e3a4a;--silver:#b8ccd4;--white:#ffffff;--off-white:#f0f6f8;
+  --gold:#c9a96e;--gold-light:#e8c98a;--pad:clamp(20px,5vw,60px);
+}
+html{scroll-behavior:smooth;background:#0a0e1a}
+body{background:#0a0e1a;color:#f0f6f8;font-family:'Rajdhani',Georgia,sans-serif;overflow-x:hidden;min-height:100vh}
+.cursor{position:fixed;width:12px;height:12px;background:var(--teal-light);border-radius:50%;pointer-events:none;z-index:9999;transform:translate(-50%,-50%);transition:width .3s,height .3s;mix-blend-mode:screen;display:none}
+.cursor-ring{position:fixed;width:40px;height:40px;border:1px solid var(--teal);border-radius:50%;pointer-events:none;z-index:9998;transform:translate(-50%,-50%);transition:width .3s,height .3s,opacity .3s;opacity:.6;display:none}
+body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:1;opacity:.2;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E")}
+
+/* NAV */
+nav{position:fixed;top:0;left:0;right:0;z-index:600;padding:18px var(--pad);display:flex;align-items:center;justify-content:space-between;transition:all .4s}
+nav.scrolled{background:rgba(10,14,26,.95);backdrop-filter:blur(20px);border-bottom:1px solid rgba(58,143,163,.15)}
+.nav-logo{display:flex;align-items:center;gap:10px;text-decoration:none;z-index:600}
+.logo-icon{width:38px;height:38px;flex-shrink:0}
+.logo-icon svg{width:100%;height:100%}
+.nav-wordmark{font-family:'Rajdhani',sans-serif;font-weight:700;font-size:clamp(1.1rem,3.5vw,1.4rem);letter-spacing:.2em;color:var(--white);text-transform:uppercase}
+.nav-wordmark span{color:var(--teal-light)}
+.nav-links{display:flex;gap:32px;list-style:none}
+.nav-links a{font-family:'Rajdhani',sans-serif;font-size:.82rem;font-weight:500;letter-spacing:.2em;text-transform:uppercase;color:var(--silver);text-decoration:none;position:relative;transition:color .3s}
+.nav-links a::after{content:'';position:absolute;bottom:-4px;left:0;width:0;height:1px;background:var(--teal-light);transition:width .3s}
+.nav-links a:hover{color:var(--white)}
+.nav-links a:hover::after{width:100%}
+.nav-cta{font-family:'Rajdhani',sans-serif;font-size:.78rem;font-weight:600;letter-spacing:.2em;text-transform:uppercase;padding:9px 24px;border:1px solid var(--teal);color:var(--teal-light);background:transparent;transition:all .3s;text-decoration:none;white-space:nowrap}
+.nav-cta:hover{background:var(--teal);color:var(--navy)}
+.hamburger{display:none;flex-direction:column;gap:5px;cursor:pointer;z-index:600;padding:4px;background:none;border:none}
+.hamburger span{display:block;width:26px;height:2px;background:var(--white);border-radius:2px;transition:all .3s;transform-origin:center}
+.hamburger.open span:nth-child(1){transform:translateY(7px) rotate(45deg)}
+.hamburger.open span:nth-child(2){opacity:0;transform:scaleX(0)}
+.hamburger.open span:nth-child(3){transform:translateY(-7px) rotate(-45deg)}
+
+/* MOBILE MENU */
+.mobile-menu{display:none;position:fixed;inset:0;background:rgba(10,14,26,.98);backdrop-filter:blur(20px);z-index:450;flex-direction:column;align-items:center;justify-content:center;opacity:0;transform:translateX(100%);transition:opacity .4s,transform .4s}
+.mobile-menu.open{opacity:1;transform:translateX(0)}
+.mobile-menu ul{list-style:none;text-align:center;width:100%}
+.mobile-menu ul li{border-bottom:1px solid rgba(58,143,163,.1)}
+.mobile-menu ul li:first-child{border-top:1px solid rgba(58,143,163,.1)}
+.mobile-menu ul li a{display:block;padding:22px 40px;font-family:'Rajdhani',sans-serif;font-size:1.2rem;font-weight:600;letter-spacing:.3em;text-transform:uppercase;color:var(--silver);text-decoration:none;transition:color .3s,background .3s}
+.mobile-menu ul li a:active{background:rgba(58,143,163,.08);color:var(--teal-light)}
+.mobile-menu-cta{margin-top:36px;font-family:'Rajdhani',sans-serif;font-size:.9rem;font-weight:600;letter-spacing:.2em;text-transform:uppercase;padding:14px 44px;border:1px solid var(--teal);color:var(--teal-light);background:transparent;text-decoration:none;transition:all .3s}
+.mobile-menu-cta:active{background:var(--teal);color:var(--navy)}
+.mobile-menu-tagline{margin-top:48px;font-family:'Cormorant Garamond',serif;font-style:italic;font-size:.95rem;color:var(--gold);letter-spacing:.15em;opacity:.7}
+
+/* HERO */
+.hero{min-height:100svh;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;padding:clamp(100px,20vw,140px) var(--pad) 100px}
+.hero-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(58,143,163,.06) 1px,transparent 1px),linear-gradient(90deg,rgba(58,143,163,.06) 1px,transparent 1px);background-size:50px 50px;animation:gridMove 20s linear infinite}
+@keyframes gridMove{0%{transform:translateY(0)}100%{transform:translateY(50px)}}
+.hero-glow{position:absolute;width:min(800px,120vw);height:min(800px,120vw);border-radius:50%;background:radial-gradient(circle,rgba(58,143,163,.12) 0%,transparent 70%);top:50%;left:50%;transform:translate(-50%,-50%);animation:pulseGlow 5s ease-in-out infinite}
+@keyframes pulseGlow{0%,100%{transform:translate(-50%,-50%) scale(1);opacity:.8}50%{transform:translate(-50%,-50%) scale(1.1);opacity:1}}
+.orb{position:absolute;border-radius:50%;filter:blur(60px);pointer-events:none;animation:orbFloat 9s ease-in-out infinite}
+.orb-1{width:300px;height:300px;background:rgba(58,143,163,.07);top:8%;left:-4%;animation-delay:0s}
+.orb-2{width:200px;height:200px;background:rgba(201,169,110,.05);bottom:10%;right:5%;animation-delay:-4s}
+@keyframes orbFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-28px)}}
+.hero-content{position:relative;z-index:10;text-align:center;max-width:960px;width:100%}
+.hero-badge{display:inline-flex;align-items:center;gap:10px;padding:7px 20px;border:1px solid rgba(58,143,163,.3);border-radius:100px;margin-bottom:30px;opacity:0;animation:fadeUp .7s .2s forwards}
+.hero-badge-dot{width:6px;height:6px;border-radius:50%;background:var(--teal-light);animation:dotBlink 2s ease-in-out infinite}
+@keyframes dotBlink{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.3;transform:scale(.5)}}
+.hero-badge span{font-family:'Space Mono',monospace;font-size:.58rem;letter-spacing:.28em;text-transform:uppercase;color:var(--teal-light)}
+.hero-title{font-family:'Cormorant Garamond',serif;font-size:clamp(3rem,9.5vw,7.5rem);font-weight:300;line-height:.97;color:var(--white);margin-bottom:12px;opacity:0;animation:fadeUp .8s .4s forwards}
+.hero-title em{font-style:italic;color:var(--teal-light)}
+.hero-brand{font-family:'Rajdhani',sans-serif;font-size:clamp(1.8rem,7vw,4rem);font-weight:700;letter-spacing:clamp(.15em,2vw,.3em);text-transform:uppercase;background:linear-gradient(135deg,var(--teal-light),var(--gold-light));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:22px;opacity:0;animation:fadeUp .8s .6s forwards}
+.hero-tagline{font-family:'Cormorant Garamond',serif;font-size:clamp(1rem,2.8vw,1.3rem);font-style:italic;color:var(--gold);letter-spacing:.12em;margin-bottom:52px;opacity:0;animation:fadeUp .8s .8s forwards}
+.hero-actions{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;opacity:0;animation:fadeUp .8s 1s forwards}
+
+/* ECG LINE */
+.hero-ecg-wrap{position:absolute;bottom:0;left:0;right:0;height:90px;overflow:hidden}
+.ecg-path{stroke-dasharray:2200;stroke-dashoffset:2200;animation:ecgDraw 3.2s ease-in-out infinite}
+.ecg-glow{stroke-dasharray:2200;stroke-dashoffset:2200;animation:ecgDraw 3.2s ease-in-out infinite;animation-delay:.06s}
+@keyframes ecgDraw{0%{stroke-dashoffset:2200;opacity:0}12%{opacity:1}72%{stroke-dashoffset:0;opacity:1}90%,100%{stroke-dashoffset:-2200;opacity:0}}
+
+.scroll-ind{position:absolute;bottom:28px;left:50%;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:6px;opacity:0;animation:fadeIn 1s 1.6s forwards;z-index:20}
+.scroll-ind span{font-family:'Space Mono',monospace;font-size:.52rem;letter-spacing:.3em;color:var(--teal);text-transform:uppercase}
+.scroll-line{width:1px;height:36px;background:linear-gradient(to bottom,var(--teal),transparent);animation:scrollAnim 2s ease-in-out infinite}
+@keyframes scrollAnim{0%{transform:scaleY(0);transform-origin:top}50%{transform:scaleY(1);transform-origin:top}51%{transform:scaleY(1);transform-origin:bottom}100%{transform:scaleY(0);transform-origin:bottom}}
+@keyframes fadeUp{from{opacity:0;transform:translateY(26px)}to{opacity:1;transform:translateY(0)}}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+
+/* BTNS */
+.btn-primary{font-family:'Rajdhani',sans-serif;font-size:.82rem;font-weight:600;letter-spacing:.18em;text-transform:uppercase;padding:15px 40px;background:linear-gradient(135deg,var(--teal),#2a7a8e);color:var(--white);border:none;cursor:pointer;position:relative;overflow:hidden;transition:all .3s;text-decoration:none;display:inline-block;-webkit-tap-highlight-color:transparent}
+.btn-primary::before{content:'';position:absolute;top:0;left:-100%;width:100%;height:100%;background:linear-gradient(90deg,transparent,rgba(255,255,255,.15),transparent);transition:left .5s}
+.btn-primary:hover::before{left:100%}
+.btn-primary:hover{transform:translateY(-2px);box-shadow:0 16px 40px rgba(58,143,163,.4)}
+.btn-primary:active{transform:translateY(0)}
+.btn-outline{font-family:'Rajdhani',sans-serif;font-size:.82rem;font-weight:600;letter-spacing:.18em;text-transform:uppercase;padding:15px 40px;background:transparent;color:var(--silver);border:1px solid rgba(184,204,212,.3);cursor:pointer;transition:all .3s;text-decoration:none;display:inline-block;-webkit-tap-highlight-color:transparent}
+.btn-outline:hover{border-color:var(--teal);color:var(--teal-light);transform:translateY(-2px)}
+.btn-outline:active{transform:translateY(0)}
+
+/* MARQUEE */
+.marquee-band{background:var(--teal);padding:12px 0;overflow:hidden}
+.marquee-track{display:flex;width:max-content;animation:marqueeScroll 30s linear infinite}
+.marquee-item{font-family:'Rajdhani',sans-serif;font-size:.72rem;font-weight:600;letter-spacing:.3em;text-transform:uppercase;color:var(--white);padding:0 36px;white-space:nowrap;display:flex;align-items:center;gap:14px}
+.marquee-item::before{content:'✦';opacity:.6;font-size:.55rem}
+@keyframes marqueeScroll{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+
+/* STATS */
+.stats-band{background:linear-gradient(135deg,var(--steel),#132030);border-top:1px solid rgba(58,143,163,.2);border-bottom:1px solid rgba(58,143,163,.2);padding:clamp(28px,5vw,52px) var(--pad);display:grid;grid-template-columns:repeat(4,1fr);gap:1px;position:relative;overflow:hidden}
+.stats-band::before{content:'';position:absolute;inset:0;background:linear-gradient(90deg,transparent,rgba(58,143,163,.05),transparent);animation:shimmer 4s ease-in-out infinite}
+@keyframes shimmer{0%{transform:translateX(-100%)}100%{transform:translateX(100%)}}
+.stat-item{text-align:center;padding:clamp(12px,2.5vw,20px) 8px;position:relative}
+.stat-item:not(:last-child)::after{content:'';position:absolute;right:0;top:20%;bottom:20%;width:1px;background:rgba(58,143,163,.2)}
+.stat-num{font-family:'Cormorant Garamond',serif;font-size:clamp(2rem,4.5vw,3.4rem);font-weight:300;color:var(--teal-light);line-height:1;display:block}
+.stat-unit{font-family:'Rajdhani',sans-serif;font-size:clamp(.9rem,2vw,1.4rem);color:var(--gold)}
+.stat-label{font-family:'Rajdhani',sans-serif;font-size:clamp(.58rem,1.3vw,.72rem);letter-spacing:.18em;text-transform:uppercase;color:var(--silver);margin-top:6px;display:block}
+
+/* SECTION COMMON */
+.section-label{font-family:'Space Mono',monospace;font-size:.6rem;letter-spacing:.35em;text-transform:uppercase;color:var(--teal);margin-bottom:14px;display:flex;align-items:center;gap:12px}
+.section-label::before{content:'';width:28px;height:1px;background:var(--teal);flex-shrink:0}
+.section-title{font-family:'Cormorant Garamond',serif;font-size:clamp(2rem,5vw,4rem);font-weight:300;line-height:1.1;margin-bottom:20px;color:var(--white)}
+.section-title em{font-style:italic;color:var(--teal-light)}
+
+/* ABOUT */
+.about-section{padding:clamp(60px,10vw,120px) var(--pad);background:var(--navy)}
+.about-inner{max-width:1300px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:clamp(40px,7vw,90px);align-items:center}
+.about-text p{font-family:'Rajdhani',sans-serif;font-size:clamp(.95rem,1.8vw,1.08rem);line-height:1.85;color:var(--silver);margin-bottom:18px;font-weight:400}
+.about-text p strong{color:var(--white);font-weight:600}
+.about-pills{display:flex;flex-wrap:wrap;gap:10px;margin:26px 0}
+.pill{font-family:'Rajdhani',sans-serif;font-size:.7rem;font-weight:600;letter-spacing:.15em;text-transform:uppercase;padding:6px 14px;background:rgba(58,143,163,.1);color:var(--teal-light);border:1px solid rgba(58,143,163,.25)}
+.founder-card{margin-top:28px;padding:22px;background:var(--steel);border:1px solid rgba(58,143,163,.2);display:flex;align-items:center;gap:18px;position:relative;overflow:hidden}
+.founder-card::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:linear-gradient(to bottom,var(--teal-light),var(--teal))}
+.founder-avatar{width:52px;height:52px;border-radius:50%;background:linear-gradient(135deg,var(--teal),var(--teal-light));display:flex;align-items:center;justify-content:center;flex-shrink:0;font-family:'Cormorant Garamond',serif;font-size:1.3rem;color:var(--white);font-weight:300;font-style:italic}
+.founder-name{font-family:'Rajdhani',sans-serif;font-size:.95rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--white);margin-bottom:4px}
+.founder-title{font-family:'Rajdhani',sans-serif;font-size:.75rem;color:var(--silver);letter-spacing:.08em}
+
+/* About visual — orbital rings + animated ECG */
+.about-visual{position:relative;height:clamp(280px,42vw,520px);display:flex;align-items:center;justify-content:center}
+.vis-ring{position:absolute;border-radius:50%;border:1px solid rgba(58,143,163,.25);animation:ringRot 20s linear infinite}
+.vis-ring:nth-child(1){width:min(270px,52vw);height:min(270px,52vw);animation-duration:18s}
+.vis-ring:nth-child(2){width:min(350px,67vw);height:min(350px,67vw);animation-duration:28s;animation-direction:reverse;border-style:dashed;border-color:rgba(58,143,163,.15)}
+.vis-ring:nth-child(3){width:min(430px,82vw);height:min(430px,82vw);animation-duration:40s;border-color:rgba(58,143,163,.08)}
+.vis-ring::before{content:'';position:absolute;top:-5px;left:50%;width:9px;height:9px;background:var(--teal-light);border-radius:50%;transform:translateX(-50%);box-shadow:0 0 12px var(--teal)}
+@keyframes ringRot{from{transform:rotate(0)}to{transform:rotate(360deg)}}
+.vis-center{position:relative;z-index:10;width:clamp(130px,22vw,190px);height:clamp(130px,22vw,190px);background:linear-gradient(135deg,var(--steel),#1a3545);border-radius:50%;display:flex;align-items:center;justify-content:center;border:1px solid rgba(58,143,163,.35);box-shadow:0 0 60px rgba(58,143,163,.18),inset 0 0 40px rgba(0,0,0,.3)}
+.vis-ecg{width:clamp(70px,14vw,120px)}
+.vis-ecg-path{stroke-dasharray:300;stroke-dashoffset:300;animation:ecgDraw2 2.5s ease-in-out infinite}
+.vis-ecg-glow{stroke-dasharray:300;stroke-dashoffset:300;animation:ecgDraw2 2.5s ease-in-out infinite;animation-delay:.06s}
+@keyframes ecgDraw2{0%{stroke-dashoffset:300;opacity:0}15%{opacity:1}70%{stroke-dashoffset:0;opacity:1}90%,100%{stroke-dashoffset:-300;opacity:0}}
+
+/* INGREDIENTS */
+.ingredients-section{padding:clamp(60px,10vw,100px) var(--pad);background:var(--deep);border-top:1px solid rgba(58,143,163,.1);border-bottom:1px solid rgba(58,143,163,.1)}
+.ingredients-inner{max-width:1300px;margin:0 auto}
+.ingredients-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:2px;margin-top:44px}
+.ingredient-card{background:var(--steel);padding:clamp(24px,3.5vw,40px) clamp(18px,2.5vw,30px);text-align:center;transition:background .3s,transform .3s;cursor:default}
+.ingredient-card:hover{background:#1f3f52;transform:translateY(-4px)}
+.ing-icon{font-size:1.8rem;margin-bottom:14px;display:block}
+.ing-name{font-family:'Rajdhani',sans-serif;font-size:.92rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--white);margin-bottom:10px}
+.ing-desc{font-family:'Rajdhani',sans-serif;font-size:.82rem;line-height:1.75;color:var(--silver)}
+
+/* PRODUCTS */
+.products-section{padding:clamp(60px,10vw,120px) var(--pad);background:var(--navy)}
+.products-inner{max-width:1300px;margin:0 auto}
+.products-header{display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:clamp(32px,5vw,56px);flex-wrap:wrap;gap:20px}
+.products-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:2px}
+.product-card{background:var(--steel);position:relative;overflow:hidden;cursor:pointer;transition:all .35s;-webkit-tap-highlight-color:transparent}
+.product-card::before{content:'';position:absolute;bottom:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--teal),var(--teal-light));transform:scaleX(0);transition:transform .4s;transform-origin:left}
+.product-card:hover::before{transform:scaleX(1)}
+.product-card:hover{background:#1f3f52;transform:translateY(-3px);box-shadow:0 20px 50px rgba(58,143,163,.2)}
+.product-img-wrap{background:var(--deep);aspect-ratio:1;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden}
+.product-img-icon{font-size:clamp(2.5rem,5vw,3.5rem);opacity:.55;transition:transform .4s}
+.product-card:hover .product-img-icon{transform:scale(1.1)}
+.product-badge{position:absolute;top:12px;left:12px;font-family:'Rajdhani',sans-serif;font-size:.62rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;padding:4px 10px;background:var(--teal);color:var(--white)}
+.product-info{padding:clamp(14px,2vw,22px)}
+.product-category{font-family:'Space Mono',monospace;font-size:.52rem;letter-spacing:.22em;text-transform:uppercase;color:var(--teal);margin-bottom:7px}
+.product-name{font-family:'Cormorant Garamond',serif;font-size:clamp(.95rem,1.8vw,1.15rem);font-weight:400;color:var(--white);margin-bottom:10px;line-height:1.3}
+.product-price-row{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.product-price{font-family:'Rajdhani',sans-serif;font-size:1.05rem;font-weight:700;color:var(--teal-light)}
+.product-original{font-family:'Rajdhani',sans-serif;font-size:.82rem;color:var(--silver);text-decoration:line-through;opacity:.6}
+.product-off{font-family:'Rajdhani',sans-serif;font-size:.65rem;font-weight:700;color:var(--navy);background:var(--gold);padding:2px 7px}
+.product-rating{display:flex;align-items:center;gap:6px;margin-top:8px}
+.stars{color:var(--gold);font-size:.8rem;letter-spacing:1px}
+.review-count{font-family:'Rajdhani',sans-serif;font-size:.72rem;color:var(--silver)}
+
+/* COMBOS */
+.combos-section{padding:clamp(60px,10vw,100px) var(--pad);background:var(--deep)}
+.combos-inner{max-width:1300px;margin:0 auto}
+.combos-header{text-align:center;margin-bottom:clamp(32px,5vw,56px)}
+.combos-header .section-label{justify-content:center}
+.combos-header .section-label::before{display:none}
+.combos-header .section-label::after{content:'';width:28px;height:1px;background:var(--teal)}
+.combos-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:2px}
+.combo-card{background:var(--steel);padding:clamp(22px,3vw,36px);position:relative;overflow:hidden;transition:all .35s;cursor:pointer;-webkit-tap-highlight-color:transparent}
+.combo-card::before{content:'';position:absolute;top:0;left:0;width:3px;height:0;background:linear-gradient(to bottom,var(--teal-light),var(--gold));transition:height .4s}
+.combo-card:hover::before{height:100%}
+.combo-card:hover{background:#1f3f52;transform:translateY(-3px);box-shadow:0 16px 40px rgba(58,143,163,.18)}
+.combo-tag{font-family:'Space Mono',monospace;font-size:.52rem;letter-spacing:.22em;text-transform:uppercase;color:var(--teal);margin-bottom:12px;display:block}
+.combo-name{font-family:'Cormorant Garamond',serif;font-size:clamp(1.05rem,2vw,1.35rem);font-weight:400;color:var(--white);margin-bottom:10px;line-height:1.25}
+.combo-desc{font-family:'Rajdhani',sans-serif;font-size:.85rem;color:var(--silver);line-height:1.7;margin-bottom:18px}
+.combo-price-row{display:flex;align-items:center;justify-content:space-between}
+.combo-price{font-family:'Rajdhani',sans-serif;font-size:1.2rem;font-weight:700;color:var(--teal-light)}
+.combo-btn{font-family:'Rajdhani',sans-serif;font-size:.7rem;font-weight:600;letter-spacing:.15em;text-transform:uppercase;padding:8px 18px;background:rgba(58,143,163,.15);color:var(--teal-light);border:1px solid rgba(58,143,163,.3);cursor:pointer;transition:all .3s}
+.combo-card:hover .combo-btn{background:var(--teal);color:var(--white);border-color:var(--teal)}
+
+/* TRUST */
+.trust-section{padding:clamp(60px,10vw,100px) var(--pad);background:var(--navy)}
+.trust-inner{max-width:1300px;margin:0 auto}
+.trust-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:2px;margin-top:44px}
+.trust-card{background:var(--steel);padding:clamp(24px,3.5vw,40px) clamp(18px,2.5vw,30px);text-align:center;border:1px solid rgba(58,143,163,.1);transition:all .3s}
+.trust-card:hover{background:#1f3f52;border-color:rgba(58,143,163,.3)}
+.trust-icon{font-size:1.8rem;margin-bottom:14px;display:block}
+.trust-title{font-family:'Rajdhani',sans-serif;font-size:.9rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--white);margin-bottom:10px}
+.trust-desc{font-family:'Rajdhani',sans-serif;font-size:.82rem;line-height:1.75;color:var(--silver)}
+
+/* PROCESS */
+.process-section{padding:clamp(60px,10vw,110px) var(--pad);background:var(--deep)}
+.process-inner{max-width:1300px;margin:0 auto}
+.process-header{text-align:center;margin-bottom:clamp(40px,6vw,70px)}
+.process-header .section-label{justify-content:center}
+.process-header .section-label::before{display:none}
+.process-header .section-label::after{content:'';width:28px;height:1px;background:var(--teal)}
+.process-steps{display:flex;gap:0;position:relative}
+.process-steps::before{content:'';position:absolute;top:32px;left:10%;right:10%;height:1px;background:linear-gradient(90deg,transparent,var(--teal),transparent);z-index:0}
+.process-step{flex:1;text-align:center;padding:0 14px;position:relative;z-index:1}
+.step-dot-wrap{margin-bottom:22px;display:flex;justify-content:center}
+.step-dot{width:64px;height:64px;border-radius:50%;background:var(--navy);border:2px solid var(--teal);display:flex;align-items:center;justify-content:center;font-family:'Cormorant Garamond',serif;font-size:1.4rem;color:var(--teal-light);transition:all .3s;position:relative}
+.step-dot::after{content:'';position:absolute;inset:-6px;border-radius:50%;border:1px solid rgba(58,143,163,.2)}
+.process-step:hover .step-dot{background:var(--teal);color:var(--white);box-shadow:0 0 30px rgba(58,143,163,.4)}
+.step-title{font-family:'Rajdhani',sans-serif;font-size:.88rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--white);margin-bottom:8px}
+.step-desc{font-family:'Rajdhani',sans-serif;font-size:.8rem;line-height:1.75;color:var(--silver)}
+
+/* TESTIMONIALS */
+.testimonials-section{padding:clamp(60px,10vw,110px) var(--pad);background:var(--navy);border-top:1px solid rgba(58,143,163,.1)}
+.testimonials-inner{max-width:860px;margin:0 auto;text-align:center}
+.testimonial-track{position:relative;overflow:hidden;min-height:190px;margin:clamp(28px,4vw,50px) 0 28px}
+.testimonial{position:absolute;inset:0;opacity:0;transform:translateY(14px);transition:all .6s ease}
+.testimonial.active{opacity:1;transform:translateY(0);position:relative}
+.testimonial-quote{font-family:'Cormorant Garamond',serif;font-size:clamp(1.1rem,2.8vw,1.5rem);font-weight:300;font-style:italic;line-height:1.7;color:var(--white);margin-bottom:20px}
+.testimonial-quote::before{content:'\201C';color:var(--teal);font-size:1.3em;line-height:0}
+.testimonial-quote::after{content:'\201D';color:var(--teal);font-size:1.3em;line-height:0}
+.testimonial-stars{color:var(--gold);font-size:.9rem;margin-bottom:10px;letter-spacing:2px}
+.testimonial-author{font-family:'Rajdhani',sans-serif;font-size:.78rem;font-weight:600;letter-spacing:.25em;text-transform:uppercase;color:var(--gold)}
+.t-dots{display:flex;justify-content:center;gap:8px;margin-top:24px}
+.t-dot{width:6px;height:6px;border-radius:50%;background:rgba(58,143,163,.3);cursor:pointer;transition:all .3s;padding:5px;margin:-5px;-webkit-tap-highlight-color:transparent}
+.t-dot.active{background:var(--teal);width:20px;border-radius:3px}
+
+/* CTA */
+.cta-section{padding:clamp(80px,12vw,130px) var(--pad);background:var(--deep);text-align:center;position:relative;overflow:hidden}
+.cta-section::before{content:'';position:absolute;inset:0;background-image:linear-gradient(rgba(58,143,163,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(58,143,163,.04) 1px,transparent 1px);background-size:40px 40px}
+.cta-glow{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:min(600px,90vw);height:min(600px,90vw);border-radius:50%;background:radial-gradient(circle,rgba(58,143,163,.1) 0%,transparent 70%);pointer-events:none}
+.cta-title{font-family:'Cormorant Garamond',serif;font-size:clamp(2.2rem,5.5vw,4.5rem);font-weight:300;color:var(--white);line-height:1.1;margin-bottom:16px;position:relative}
+.cta-title em{font-style:italic;color:var(--teal-light)}
+.cta-sub{font-family:'Rajdhani',sans-serif;font-size:clamp(.9rem,2vw,1.05rem);color:var(--silver);margin-bottom:44px;letter-spacing:.08em;position:relative}
+.cta-contact{margin-top:36px;display:flex;justify-content:center;gap:32px;flex-wrap:wrap;position:relative}
+.cta-contact a{font-family:'Rajdhani',sans-serif;font-size:.78rem;font-weight:500;letter-spacing:.12em;color:var(--silver);text-decoration:none;transition:color .3s;text-transform:uppercase}
+.cta-contact a:hover{color:var(--teal-light)}
+
+/* FOOTER */
+footer{background:var(--ink,#060a12);background:rgba(6,10,18,1);padding:clamp(40px,6vw,64px) var(--pad);display:grid;grid-template-columns:1.4fr 1fr 1fr 1fr;gap:clamp(28px,4vw,50px);border-top:1px solid rgba(58,143,163,.12)}
+.footer-brand .logo-wordmark{font-family:'Rajdhani',sans-serif;font-weight:700;font-size:1.1rem;letter-spacing:.18em;text-transform:uppercase;color:var(--white);margin-bottom:10px;display:block}
+.footer-brand .logo-wordmark span{color:var(--teal-light)}
+.footer-brand p{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:.9rem;color:var(--gold);letter-spacing:.1em;margin-bottom:6px}
+.footer-brand .footer-sub{font-family:'Rajdhani',sans-serif;font-size:.68rem;color:rgba(255,255,255,.3);letter-spacing:.15em;text-transform:uppercase;font-style:normal}
+.footer-ecg{margin-top:18px;opacity:.18}
+.footer-col h4{font-family:'Rajdhani',sans-serif;font-size:.65rem;font-weight:600;letter-spacing:.3em;text-transform:uppercase;color:var(--teal-light);margin-bottom:16px}
+.footer-col ul{list-style:none}
+.footer-col ul li{margin-bottom:9px}
+.footer-col ul li a{font-family:'Rajdhani',sans-serif;font-size:.86rem;color:rgba(255,255,255,.4);text-decoration:none;transition:color .3s;-webkit-tap-highlight-color:transparent}
+.footer-col ul li a:hover,.footer-col ul li a:active{color:var(--white)}
+.footer-bottom{background:#060a12;padding:18px var(--pad);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;border-top:1px solid rgba(255,255,255,.05)}
+.footer-bottom p{font-family:'Space Mono',monospace;font-size:.57rem;letter-spacing:.14em;color:rgba(255,255,255,.22);text-transform:uppercase}
+.footer-insta a{font-family:'Rajdhani',sans-serif;font-size:.75rem;color:var(--teal);text-decoration:none;letter-spacing:.1em}
+.footer-insta a:hover{color:var(--teal-light)}
+
+/* REVEAL */
+.reveal{opacity:0;transform:translateY(32px);transition:opacity .75s ease,transform .75s ease}
+.reveal.visible{opacity:1;transform:translateY(0)}
+.rd1{transition-delay:.08s}.rd2{transition-delay:.16s}.rd3{transition-delay:.24s}.rd4{transition-delay:.32s}
+
+/* RESPONSIVE */
+@media(max-width:1100px){
+  .products-grid{grid-template-columns:repeat(2,1fr)}
+  .combos-grid{grid-template-columns:repeat(2,1fr)}
+  .ingredients-grid{grid-template-columns:repeat(2,1fr)}
+  footer{grid-template-columns:1fr 1fr}
+}
+@media(max-width:900px){
+  .trust-grid{grid-template-columns:repeat(2,1fr)}
+  .process-steps{flex-direction:column;gap:24px}
+  .process-steps::before{display:none}
+  .about-inner{grid-template-columns:1fr;gap:40px}
+  .about-visual{order:-1;height:260px}
+  .vis-ring:nth-child(3){display:none}
+}
+@media(max-width:768px){
+  .nav-links,.nav-cta{display:none}
+  .hamburger{display:flex}
+  .mobile-menu{display:flex}
+  .hero{padding-top:88px;padding-bottom:60px}
+  .scroll-ind{display:none}
+  .stats-band{grid-template-columns:repeat(2,1fr)}
+  .stat-item:nth-child(2)::after,.stat-item:nth-child(4)::after{display:none}
+  .stat-item:nth-child(1),.stat-item:nth-child(2){border-bottom:1px solid rgba(58,143,163,.15);padding-bottom:18px}
+  .stat-item:nth-child(3),.stat-item:nth-child(4){padding-top:18px}
+  .products-grid{grid-template-columns:repeat(2,1fr)}
+  .combos-grid{grid-template-columns:1fr}
+  .trust-grid{grid-template-columns:1fr 1fr}
+  .products-header{flex-direction:column;align-items:flex-start}
+  footer{grid-template-columns:1fr 1fr;gap:30px}
+  .footer-bottom{flex-direction:column;text-align:center}
+}
+@media(max-width:480px){
+  .products-grid{grid-template-columns:1fr}
+  .ingredients-grid{grid-template-columns:1fr}
+  .trust-grid{grid-template-columns:1fr}
+  .hero-actions{flex-direction:column}
+  .btn-primary,.btn-outline{width:100%;text-align:center}
+  footer{grid-template-columns:1fr}
+  .cta-contact{flex-direction:column;gap:14px}
+}
+</style>
+</head>
+<body>
+
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+
+<!-- NAV -->
+<nav id="nav">
+  <a href="#" class="nav-logo">
+    <div class="logo-icon">
+      <svg viewBox="0 0 40 40" fill="none">
+        <circle cx="20" cy="20" r="19" stroke="#3a8fa3" stroke-width="1"/>
+        <circle cx="9" cy="20" r="3.5" fill="none" stroke="#3a8fa3" stroke-width="1.3"/>
+        <circle cx="9" cy="20" r="1.3" fill="#3a8fa3"/>
+        <polyline points="12.5,20 15,14 18,26 21,11 24,29 27,20 40,20" stroke="#5bb8d4" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </div>
+    <span class="nav-wordmark">Medi<span>metics</span></span>
+  </a>
+  <ul class="nav-links">
+    <li><a href="#about">About</a></li>
+    <li><a href="shop.html">Products</a></li>
+    <li><a href="#combos">Kits</a></li>
+    <li><a href="#process">Science</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+  <a href="shop.html" class="nav-cta">Shop Now</a>
+  <button class="hamburger" id="hamburger" aria-label="Menu"><span></span><span></span><span></span></button>
+</nav>
+
+<!-- MOBILE MENU -->
+<div class="mobile-menu" id="mobileMenu">
+  <ul>
+    <li><a href="#about" class="mlink">About</a></li>
+    <li><a href="shop.html" class="mlink">Products</a></li>
+    <li><a href="#combos" class="mlink">Kits</a></li>
+    <li><a href="#process" class="mlink">Science</a></li>
+    <li><a href="#contact" class="mlink">Contact</a></li>
+  </ul>
+  <a href="shop.html" class="mobile-menu-cta mlink">Shop Now</a>
+  <p class="mobile-menu-tagline">Reality &amp; Royalty</p>
+</div>
+
+<!-- HERO -->
+<section class="hero" id="home">
+  <div class="hero-grid"></div>
+  <div class="hero-glow"></div>
+  <div class="orb orb-1"></div>
+  <div class="orb orb-2"></div>
+
+  <div class="hero-content">
+    <div class="hero-badge">
+      <span class="hero-badge-dot"></span>
+      <span>Science Driven Skincare · Est. 2021</span>
+    </div>
+    <h1 class="hero-title">Your Skin<br>Deserves <em>Real</em></h1>
+    <div class="hero-brand">Medimetics</div>
+    <p class="hero-tagline">Reality &amp; Royalty — Dermatologist-Backed Formulas for Every Skin</p>
+    <div class="hero-actions">
+      <a href="shop.html" class="btn-primary">Shop Products</a>
+      <a href="#about" class="btn-outline">Our Story</a>
+    </div>
+  </div>
+
+  <!-- ANIMATED HEARTBEAT ECG LINE -->
+  <div class="hero-ecg-wrap">
+    <svg viewBox="0 0 1440 90" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+      <polyline points="0,45 260,45 290,45 312,16 330,74 346,6 364,84 380,45 408,45 668,45 698,45 720,16 738,74 754,6 772,84 788,45 816,45 1076,45 1106,45 1128,16 1146,74 1162,6 1180,84 1196,45 1224,45 1440,45"
+        fill="none" stroke="rgba(58,143,163,0.08)" stroke-width="1.5"/>
+      <!-- main animated line -->
+      <polyline class="ecg-path" points="0,45 260,45 290,45 312,16 330,74 346,6 364,84 380,45 408,45 668,45 698,45 720,16 738,74 754,6 772,84 788,45 816,45 1076,45 1106,45 1128,16 1146,74 1162,6 1180,84 1196,45 1224,45 1440,45"
+        fill="none" stroke="#5bb8d4" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      <!-- glow layer -->
+      <polyline class="ecg-glow" points="0,45 260,45 290,45 312,16 330,74 346,6 364,84 380,45 408,45 668,45 698,45 720,16 738,74 754,6 772,84 788,45 816,45 1076,45 1106,45 1128,16 1146,74 1162,6 1180,84 1196,45 1224,45 1440,45"
+        fill="none" stroke="rgba(91,184,212,0.25)" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+  </div>
+
+  <div class="scroll-ind">
+    <span>Scroll</span>
+    <div class="scroll-line"></div>
+  </div>
+</section>
+
+<!-- MARQUEE -->
+<div class="marquee-band">
+  <div class="marquee-track">
+    <div class="marquee-item">Science Driven Skincare</div>
+    <div class="marquee-item">Dermatologically Tested</div>
+    <div class="marquee-item">Cruelty Free</div>
+    <div class="marquee-item">Paraben Free</div>
+    <div class="marquee-item">50,000+ Happy Customers</div>
+    <div class="marquee-item">4.8★ Average Rating</div>
+    <div class="marquee-item">Clinically Backed</div>
+    <div class="marquee-item">Reality &amp; Royalty</div>
+    <div class="marquee-item">Science Driven Skincare</div>
+    <div class="marquee-item">Dermatologically Tested</div>
+    <div class="marquee-item">Cruelty Free</div>
+    <div class="marquee-item">Paraben Free</div>
+    <div class="marquee-item">50,000+ Happy Customers</div>
+    <div class="marquee-item">4.8★ Average Rating</div>
+    <div class="marquee-item">Clinically Backed</div>
+    <div class="marquee-item">Reality &amp; Royalty</div>
+  </div>
+</div>
+
+<!-- STATS -->
+<div class="stats-band">
+  <div class="stat-item reveal"><span class="stat-num">50k<span class="stat-unit">+</span></span><span class="stat-label">Happy Customers</span></div>
+  <div class="stat-item reveal rd1"><span class="stat-num">71<span class="stat-unit">K</span></span><span class="stat-label">Instagram Followers</span></div>
+  <div class="stat-item reveal rd2"><span class="stat-num">4.8<span class="stat-unit">★</span></span><span class="stat-label">Average Rating</span></div>
+  <div class="stat-item reveal rd3"><span class="stat-num">9<span class="stat-unit">+</span></span><span class="stat-label">Premium Products</span></div>
+</div>
+
+<!-- ABOUT -->
+<section class="about-section" id="about">
+  <div class="about-inner">
+    <div class="about-text">
+      <div class="section-label reveal">Our Story</div>
+      <h2 class="section-title reveal">Where <em>Dermatology</em><br>Meets Daily Skincare</h2>
+      <div class="reveal">
+        <p>Founded in <strong>2021 by Dr. Mankirat Singh</strong>, Medimetics was built on a simple belief — that everyone deserves skincare backed by real science. Our debut launch of 3 products sold out in a month. Today, over <strong>50,000 Indians</strong> trust us daily.</p>
+        <p>Every formula is crafted by <strong>expert cosmetic chemists</strong>, rigorously tested across diverse skin types, and refined until it delivers the visible results we promise. No fluff. Just science.</p>
+      </div>
+      <div class="about-pills reveal">
+        <span class="pill">Leaping Bunny Certified</span>
+        <span class="pill">Paraben Free</span>
+        <span class="pill">Sulfate Free</span>
+        <span class="pill">Non-Comedogenic</span>
+        <span class="pill">pH Balanced</span>
+      </div>
+      <div class="founder-card reveal">
+        <div class="founder-avatar">M</div>
+        <div>
+          <div class="founder-name">Dr. Mankirat Singh</div>
+          <div class="founder-title">Founder & Managing Director · @drx_mankirat_singh_22</div>
+        </div>
+      </div>
+    </div>
+    <div class="about-visual reveal">
+      <div class="vis-ring"></div>
+      <div class="vis-ring"></div>
+      <div class="vis-ring"></div>
+      <div class="vis-center">
+        <svg class="vis-ecg" viewBox="0 0 120 40" fill="none">
+          <polyline class="vis-ecg-glow" points="0,20 25,20 32,7 39,33 45,3 51,37 57,20 78,20 85,7 92,33 98,3 104,37 110,20 120,20"
+            stroke="rgba(91,184,212,0.3)" stroke-width="7" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+          <polyline class="vis-ecg-path" points="0,20 25,20 32,7 39,33 45,3 51,37 57,20 78,20 85,7 92,33 98,3 104,37 110,20 120,20"
+            stroke="#5bb8d4" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- INGREDIENTS -->
+<section class="ingredients-section" id="ingredients">
+  <div class="ingredients-inner">
+    <div class="section-label reveal">Power Actives</div>
+    <h2 class="section-title reveal">Formulated with <em>The Best</em></h2>
+    <div class="ingredients-grid">
+      <div class="ingredient-card reveal">
+        <span class="ing-icon">💧</span>
+        <div class="ing-name">Hyaluronic Acid</div>
+        <div class="ing-desc">Draws moisture deep into skin for lasting 24-hour hydration and a plump, bouncy feel.</div>
+      </div>
+      <div class="ingredient-card reveal rd1">
+        <span class="ing-icon">✨</span>
+        <div class="ing-name">Niacinamide</div>
+        <div class="ing-desc">Visibly shrinks pores, controls sebum and evens skin tone for a glass-skin glow.</div>
+      </div>
+      <div class="ingredient-card reveal rd2">
+        <span class="ing-icon">🍊</span>
+        <div class="ing-name">Vitamin C & Retinol</div>
+        <div class="ing-desc">Brightens dark spots, boosts collagen and accelerates cellular renewal overnight.</div>
+      </div>
+      <div class="ingredient-card reveal rd3">
+        <span class="ing-icon">🌿</span>
+        <div class="ing-name">Alpha Arbutin & Peptides</div>
+        <div class="ing-desc">Targets pigmentation at the source while peptides firm and strengthen the skin barrier.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PRODUCTS -->
+<section class="products-section" id="products">
+  <div class="products-inner">
+    <div class="products-header">
+      <div>
+        <div class="section-label reveal">Our Range</div>
+        <h2 class="section-title reveal">Bestselling <em>Products</em></h2>
+      </div>
+      <a href="shop.html" class="btn-outline reveal">View All</a>
+    </div>
+    <div class="products-grid">
+      <div class="product-card reveal">
+        <div class="product-img-wrap"><span class="product-img-icon">🧴</span><span class="product-badge">32% OFF</span></div>
+        <div class="product-info">
+          <div class="product-category">Face · Serum</div>
+          <div class="product-name">Anti Acne &amp; Pigmentation Face Serum</div>
+          <div class="product-price-row"><span class="product-price">₹515</span><span class="product-original">₹755</span><span class="product-off">32% Off</span></div>
+          <div class="product-rating"><span class="stars">★★★★★</span><span class="review-count">134 reviews</span></div>
+        </div>
+      </div>
+      <div class="product-card reveal rd1">
+        <div class="product-img-wrap"><span class="product-img-icon">🌙</span><span class="product-badge">20% OFF</span></div>
+        <div class="product-info">
+          <div class="product-category">Face · Moisturizer</div>
+          <div class="product-name">Night Glow Moisturizer</div>
+          <div class="product-price-row"><span class="product-price">₹685</span><span class="product-original">₹855</span><span class="product-off">20% Off</span></div>
+          <div class="product-rating"><span class="stars">★★★★★</span><span class="review-count">91 reviews</span></div>
+        </div>
+      </div>
+      <div class="product-card reveal rd2">
+        <div class="product-img-wrap"><span class="product-img-icon">🌾</span><span class="product-badge">54% OFF</span></div>
+        <div class="product-info">
+          <div class="product-category">Face · Scrub</div>
+          <div class="product-name">Rice Water &amp; Coffee Extract Scrub</div>
+          <div class="product-price-row"><span class="product-price">₹255</span><span class="product-original">₹555</span><span class="product-off">54% Off</span></div>
+          <div class="product-rating"><span class="stars">★★★★★</span><span class="review-count">48 reviews</span></div>
+        </div>
+      </div>
+      <div class="product-card reveal rd3">
+        <div class="product-img-wrap"><span class="product-img-icon">👁️</span><span class="product-badge">60% OFF</span></div>
+        <div class="product-info">
+          <div class="product-category">Eye · Cream</div>
+          <div class="product-name">Under Eye Cream with Retinol, Vit C &amp; Kojic Acid</div>
+          <div class="product-price-row"><span class="product-price">₹299</span><span class="product-original">₹755</span><span class="product-off">60% Off</span></div>
+          <div class="product-rating"><span class="stars">★★★★★</span><span class="review-count">62 reviews</span></div>
+        </div>
+      </div>
+      <div class="product-card reveal">
+        <div class="product-img-wrap"><span class="product-img-icon">💆</span><span class="product-badge">34% OFF</span></div>
+        <div class="product-info">
+          <div class="product-category">Hair · Oil</div>
+          <div class="product-name">Anti Hair Fall + Anti Dandruff Hair Oil</div>
+          <div class="product-price-row"><span class="product-price">₹499</span><span class="product-original">₹755</span><span class="product-off">34% Off</span></div>
+          <div class="product-rating"><span class="stars">★★★★★</span><span class="review-count">86 reviews</span></div>
+        </div>
+      </div>
+      <div class="product-card reveal rd1">
+        <div class="product-img-wrap"><span class="product-img-icon">🌱</span><span class="product-badge">34% OFF</span></div>
+        <div class="product-info">
+          <div class="product-category">Hair · Oil</div>
+          <div class="product-name">Hair Growth Oil</div>
+          <div class="product-price-row"><span class="product-price">₹499</span><span class="product-original">₹755</span><span class="product-off">34% Off</span></div>
+          <div class="product-rating"><span class="stars">★★★★★</span><span class="review-count">72 reviews</span></div>
+        </div>
+      </div>
+      <div class="product-card reveal rd2">
+        <div class="product-img-wrap"><span class="product-img-icon">🫧</span><span class="product-badge">16% OFF</span></div>
+        <div class="product-info">
+          <div class="product-category">Hair · Shampoo</div>
+          <div class="product-name">Keratin Shampoo for Hairfall Control</div>
+          <div class="product-price-row"><span class="product-price">₹400</span><span class="product-original">₹475</span><span class="product-off">16% Off</span></div>
+          <div class="product-rating"><span class="stars">★★★★★</span><span class="review-count">55 reviews</span></div>
+        </div>
+      </div>
+      <div class="product-card reveal rd3">
+        <div class="product-img-wrap"><span class="product-img-icon">✨</span><span class="product-badge">29% OFF</span></div>
+        <div class="product-info">
+          <div class="product-category">Face · Mask</div>
+          <div class="product-name">Radiance Advanced Face Mask</div>
+          <div class="product-price-row"><span class="product-price">₹499</span><span class="product-original">₹699</span><span class="product-off">29% Off</span></div>
+          <div class="product-rating"><span class="stars">★★★★☆</span><span class="review-count">39 reviews</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- COMBOS -->
+<section class="combos-section" id="combos">
+  <div class="combos-inner">
+    <div class="combos-header">
+      <div class="section-label reveal">Best Value</div>
+      <h2 class="section-title reveal">Curated <em>Combo Kits</em></h2>
+    </div>
+    <div class="combos-grid">
+      <div class="combo-card reveal"><span class="combo-tag">Skin Combo</span><div class="combo-name">Anti Pigmentation Kit</div><div class="combo-desc">Complete regimen to fade dark spots, even skin tone and reveal luminous, radiant skin.</div><div class="combo-price-row"><span class="combo-price">₹2,200</span><button class="combo-btn">Add to Cart</button></div></div>
+      <div class="combo-card reveal rd1"><span class="combo-tag">Skin Combo</span><div class="combo-name">Anti Acne Combo</div><div class="combo-desc">Fight breakouts at every stage — from active acne prevention to post-acne pigmentation.</div><div class="combo-price-row"><span class="combo-price">₹815</span><button class="combo-btn">Add to Cart</button></div></div>
+      <div class="combo-card reveal rd2"><span class="combo-tag">Hair Combo</span><div class="combo-name">Hair Growth Kit</div><div class="combo-desc">Targeted hairfall control and growth stimulation for thicker, denser, healthier hair.</div><div class="combo-price-row"><span class="combo-price">₹1,000</span><button class="combo-btn">Add to Cart</button></div></div>
+      <div class="combo-card reveal"><span class="combo-tag">Skin Combo</span><div class="combo-name">Skin Brightening Kit</div><div class="combo-desc">A complete brightening routine for visibly glowing, healthy-looking skin in 28 days.</div><div class="combo-price-row"><span class="combo-price">₹1,980</span><button class="combo-btn">Add to Cart</button></div></div>
+      <div class="combo-card reveal rd1"><span class="combo-tag">Body Combo</span><div class="combo-name">Body Tan Removal Kit</div><div class="combo-desc">Exfoliate, brighten and restore your natural skin tone with this powerful tan-removal duo.</div><div class="combo-price-row"><span class="combo-price">₹1,000</span><button class="combo-btn">Add to Cart</button></div></div>
+      <div class="combo-card reveal rd2"><span class="combo-tag">Skin Combo</span><div class="combo-name">Anti Darkspot &amp; Brightening Kit</div><div class="combo-desc">Targeted darkspot correction combined with a brightening boost for clear, even skin.</div><div class="combo-price-row"><span class="combo-price">₹1,850</span><button class="combo-btn">Add to Cart</button></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- TRUST -->
+<section class="trust-section">
+  <div class="trust-inner">
+    <div class="section-label reveal">The Promise</div>
+    <h2 class="section-title reveal">The Medimetics <em>Standard</em></h2>
+    <div class="trust-grid">
+      <div class="trust-card reveal"><span class="trust-icon">🔬</span><div class="trust-title">Clinically Tested</div><div class="trust-desc">Double-blind studies, 28-day efficacy trials and independent lab verification on every formula.</div></div>
+      <div class="trust-card reveal rd1"><span class="trust-icon">🐰</span><div class="trust-title">Cruelty Free</div><div class="trust-desc">Leaping Bunny certified. Zero animal testing. On any ingredient, ever. Guaranteed.</div></div>
+      <div class="trust-card reveal rd2"><span class="trust-icon">🌿</span><div class="trust-title">Clean Formula</div><div class="trust-desc">Free from parabens, sulfates, mineral oils and artificial fragrances. Safe for sensitive skin.</div></div>
+      <div class="trust-card reveal rd3"><span class="trust-icon">💎</span><div class="trust-title">pH Balanced</div><div class="trust-desc">Hypoallergenic, non-comedogenic formulas that work with your skin's natural barrier.</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- PROCESS -->
+<section class="process-section" id="process">
+  <div class="process-inner">
+    <div class="process-header">
+      <div class="section-label reveal">Our Science</div>
+      <h2 class="section-title reveal">From Lab to <em>Your Skin</em></h2>
+    </div>
+    <div class="process-steps">
+      <div class="process-step reveal"><div class="step-dot-wrap"><div class="step-dot">01</div></div><div class="step-title">Research</div><div class="step-desc">Studying skin biology and the latest active ingredients from global dermatological literature.</div></div>
+      <div class="process-step reveal rd1"><div class="step-dot-wrap"><div class="step-dot">02</div></div><div class="step-title">Formulate</div><div class="step-desc">Expert chemists craft optimal ingredient combinations for efficacy, stability and skin compatibility.</div></div>
+      <div class="process-step reveal rd2"><div class="step-dot-wrap"><div class="step-dot">03</div></div><div class="step-title">Test</div><div class="step-desc">Rigorous dermatological and safety testing across diverse skin types, tones and sensitivities.</div></div>
+      <div class="process-step reveal rd3"><div class="step-dot-wrap"><div class="step-dot">04</div></div><div class="step-title">Refine</div><div class="step-desc">Iteration based on clinical results until every metric meets our non-negotiable standard.</div></div>
+      <div class="process-step reveal rd4"><div class="step-dot-wrap"><div class="step-dot">05</div></div><div class="step-title">Deliver</div><div class="step-desc">Premium packaging engineered to preserve potency and protect every active ingredient.</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section class="testimonials-section">
+  <div class="testimonials-inner">
+    <div class="section-label reveal" style="justify-content:center"><span>Real Results</span></div>
+    <h2 class="section-title reveal">What Our <em>Customers</em> Say</h2>
+    <div class="testimonial-track" id="tTrack">
+      <div class="testimonial active"><div class="testimonial-stars">★★★★★</div><p class="testimonial-quote">The Anti Acne Serum cleared my stubborn breakouts in just 3 weeks. I've tried so many products — nothing worked like Medimetics. This is genuinely science-backed skincare.</p><p class="testimonial-author">Priya S. — Delhi</p></div>
+      <div class="testimonial"><div class="testimonial-stars">★★★★★</div><p class="testimonial-quote">The Night Glow Moisturizer has completely transformed my skin texture. Waking up with genuinely glowing skin every morning is something I never expected at this price point.</p><p class="testimonial-author">Anika R. — Mumbai</p></div>
+      <div class="testimonial"><div class="testimonial-stars">★★★★★</div><p class="testimonial-quote">I ordered the Hair Growth Kit and results after 60 days are incredible. Less hairfall, more density. The whole family is now a Medimetics household!</p><p class="testimonial-author">Sunita M. — Bengaluru</p></div>
+      <div class="testimonial"><div class="testimonial-stars">★★★★★</div><p class="testimonial-quote">Under Eye Cream at ₹299 with retinol and kojic acid? Dark circles lightened noticeably in a month. Dr. Mankirat's formulas genuinely punch above their price.</p><p class="testimonial-author">Rohit K. — Chandigarh</p></div>
+    </div>
+    <div class="t-dots">
+      <div class="t-dot active" onclick="goTo(0)"></div>
+      <div class="t-dot" onclick="goTo(1)"></div>
+      <div class="t-dot" onclick="goTo(2)"></div>
+      <div class="t-dot" onclick="goTo(3)"></div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section" id="contact">
+  <div class="cta-glow"></div>
+  <h2 class="cta-title reveal">Start Your <em>Glow</em><br>Journey Today</h2>
+  <p class="cta-sub reveal">Join 50,000+ Indians who trust Medimetics for real, visible skincare results.</p>
+  <div class="reveal" style="display:flex;gap:14px;justify-content:center;flex-wrap:wrap">
+    <a href="shop.html" class="btn-primary">Shop Now</a>
+    <a href="#combos" class="btn-outline">View Combo Kits</a>
+  </div>
+  <div class="cta-contact reveal">
+    <a href="/cdn-cgi/l/email-protection#036e66676a6e66776a60703543646e626a6f2d606c6e">📧 <span class="__cf_email__" data-cfemail="127f77767b7f77667b71612452757f737b7e3c717d7f">[email&#160;protected]</span></a>
+    <a href="tel:+917888466144">📞 +91 78884 66144</a>
+    <a href="https://instagram.com/realmedimetics" target="_blank">📸 @realmedimetics</a>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-brand">
+    <span class="logo-wordmark">Medi<span>metics</span></span>
+    <p>Reality &amp; Royalty</p>
+    <span class="footer-sub">Science Driven Skincare · Est. 2021</span>
+    <svg class="footer-ecg" width="130" viewBox="0 0 130 22" fill="none">
+      <polyline points="0,11 26,11 31,4 36,18 40,1 44,21 48,11 76,11 81,4 86,18 90,1 94,21 98,11 130,11" stroke="#5bb8d4" stroke-width="1.2" fill="none" stroke-linecap="round"/>
+    </svg>
+  </div>
+  <div class="footer-col"><h4>Products</h4><ul>
+    <li><a href="shop.html">Anti Acne Serum</a></li>
+    <li><a href="shop.html">Night Glow Moisturizer</a></li>
+    <li><a href="shop.html">Under Eye Cream</a></li>
+    <li><a href="shop.html">Hair Growth Oil</a></li>
+    <li><a href="shop.html">Rice Water Scrub</a></li>
+  </ul></div>
+  <div class="footer-col"><h4>Combo Kits</h4><ul>
+    <li><a href="#combos">Anti Pigmentation Kit</a></li>
+    <li><a href="#combos">Anti Acne Combo</a></li>
+    <li><a href="#combos">Hair Growth Kit</a></li>
+    <li><a href="#combos">Skin Brightening Kit</a></li>
+    <li><a href="#combos">Tan Removal Kit</a></li>
+  </ul></div>
+  <div class="footer-col"><h4>Company</h4><ul>
+    <li><a href="#about">About Us</a></li>
+    <li><a href="#process">Our Science</a></li>
+    <li><a href="/cdn-cgi/l/email-protection#2c41494845414958454f5f1a6c4b414d4540024f4341">Email Us</a></li>
+    <li><a href="tel:+917888466144">+91 78884 66144</a></li>
+    <li><a href="https://instagram.com/realmedimetics" target="_blank">@realmedimetics</a></li>
+  </ul></div>
+</footer>
+<div class="footer-bottom">
+  <p>© 2026 Medimetics. All Rights Reserved.</p>
+  <div class="footer-insta"><a href="https://instagram.com/realmedimetics" target="_blank">@realmedimetics · 71K Followers</a></div>
+</div>
+
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+// Cursor — only activate on real pointer (mouse) devices
+const cur=document.getElementById('cursor'),ring=document.getElementById('cursorRing');
+let mx=0,my=0,rx=0,ry=0,cursorActive=false;
+function activateCursor(){
+  if(cursorActive)return;cursorActive=true;
+  cur.style.display='block';ring.style.display='block';
+  document.body.style.cursor='none';
+  document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;cur.style.left=mx+'px';cur.style.top=my+'px';});
+  (function loop(){rx+=(mx-rx)*.12;ry+=(my-ry)*.12;ring.style.left=rx+'px';ring.style.top=ry+'px';requestAnimationFrame(loop);})();
+  document.querySelectorAll('a,button,.product-card,.combo-card,.t-dot').forEach(el=>{
+    el.addEventListener('mouseenter',()=>{cur.style.width='18px';cur.style.height='18px';ring.style.width='54px';ring.style.height='54px';});
+    el.addEventListener('mouseleave',()=>{cur.style.width='12px';cur.style.height='12px';ring.style.width='40px';ring.style.height='40px';});
+  });
+}
+window.addEventListener('mousemove',activateCursor,{once:true});
+// Nav
+const nav=document.getElementById('nav');
+window.addEventListener('scroll',()=>nav.classList.toggle('scrolled',scrollY>40),{passive:true});
+// Hamburger
+const hbg=document.getElementById('hamburger'),mob=document.getElementById('mobileMenu');
+let open=false;
+function toggleMenu(v){open=v;hbg.classList.toggle('open',v);mob.classList.toggle('open',v);document.body.style.overflow=v?'hidden':'';}
+hbg.addEventListener('click',()=>toggleMenu(!open));
+document.querySelectorAll('.mlink').forEach(l=>l.addEventListener('click',()=>toggleMenu(false)));
+// Reveal
+const ro=new IntersectionObserver(e=>e.forEach(x=>{if(x.isIntersecting)x.target.classList.add('visible');}),{threshold:.07,rootMargin:'0px 0px -36px 0px'});
+document.querySelectorAll('.reveal').forEach(el=>ro.observe(el));
+// Testimonials
+let c=0;
+const tms=document.querySelectorAll('.testimonial'),dts=document.querySelectorAll('.t-dot');
+function goTo(i){tms[c].classList.remove('active');dts[c].classList.remove('active');c=i;tms[c].classList.add('active');dts[c].classList.add('active');}
+window.goTo=goTo;
+let timer=setInterval(()=>goTo((c+1)%tms.length),5000);
+let ts=0;
+document.getElementById('tTrack').addEventListener('touchstart',e=>{ts=e.touches[0].clientX;},{passive:true});
+document.getElementById('tTrack').addEventListener('touchend',e=>{const d=ts-e.changedTouches[0].clientX;if(Math.abs(d)>40){clearInterval(timer);goTo(d>0?(c+1)%tms.length:(c-1+tms.length)%tms.length);}},{passive:true});
+</script>
+</body>
+</html>
